@@ -3,7 +3,7 @@ import React from "react";
 function Card({ userId, card, onCardClick }) {
   function handleClick() {
     onCardClick(card);
-  }
+  };
 
   return (
     <li className="element">
