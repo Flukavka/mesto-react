@@ -1,26 +1,15 @@
-import React from "react";
+import { useEffect, useState } from 'react';
 import api from "../utils/api";
 import Card from "./Card";
 
 function Main(props) {
-  const [userName, setUserName] = React.useState('');
-  const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState('#');
-  const [user, getUserData] = React.useState({});
-  const [cards, setInitialCards] = React.useState([]);
+  const [user, setUser] = useState({});
+  const [cards, setCards] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api.getUserInfo()
       .then((userData) => {
-        setUserName(userData.name);
-        setUserDescription(userData.about);
-        setUserAvatar(userData.avatar);
-        getUserData({
-          name: userData.name,
-          about: userData.about,
-          avatar: userData.avatar,
-          userId: userData._id
-        })
+        setUser(userData)
       })
       .catch((err) => {
         console.log(err);
@@ -28,16 +17,7 @@ function Main(props) {
 
     api.getInitialCards()
       .then((initialCards) => {
-        setInitialCards(
-          initialCards.map((cardData) => (
-            {
-              name: cardData.name,
-              link: cardData.link,
-              likes: cardData.likes.length,
-              cardId: cardData._id,
-              ownerId: cardData.owner._id
-            }))
-        )
+        setCards(initialCards)
       })
       .catch((err) => {
         console.log(err);
@@ -52,7 +32,7 @@ function Main(props) {
           <div className="profile__avatar-wrapper">
             <img
               className="profile__avatar"
-              src={userAvatar}
+              src={user.avatar}
               alt="Аватар пользователя"
             />
 
@@ -65,9 +45,9 @@ function Main(props) {
 
           <div className="profile__user-info">
             <div className="profile__wrapper">
-              <h1 className="profile__username">{userName}</h1>
+              <h1 className="profile__username">{user.name}</h1>
 
-              <p className="profile__profession">{userDescription}</p>
+              <p className="profile__profession">{user.about}</p>
             </div>
 
             <button
@@ -95,12 +75,8 @@ function Main(props) {
           {
             cards.map((card) => (
               <Card
-                key={card.cardId}
-                name={card.name}
-                link={card.link}
-                likes={card.likes}
-                ownerId={card.ownerId}
-                userId={user.userId}
+                key={card._id}
+                userId={user._id}
                 onCardClick={props.onCardClick}
                 card={card}
               />

@@ -1,20 +1,20 @@
 import React from "react";
 
-function Card(props) {
-
+function Card({ userId, card, onCardClick }) {
   function handleClick() {
-    props.onCardClick(props.card);
+    onCardClick(card);
   }
 
   return (
     <li className="element">
-      <img onClick={handleClick}
+      <img
+        onClick={handleClick}
         className="element__image"
-        src={props.link}
-        alt={`Фотография ${props.name}`} />
+        src={card.link}
+        alt={`Фотография ${card.name}`} />
 
       <button
-        className={(props.ownerId === props.userId)
+        className={(card.owner._id === userId)
           ? `element__btn-delete`
           : `element__btn-delete element__btn-delete_deactivated`}
         type="button"
@@ -22,7 +22,7 @@ function Card(props) {
       ></button>
 
       <div className="element__description">
-        <h2 className="element__title">{props.name}</h2>
+        <h2 className="element__title">{card.name}</h2>
 
         <div className="element__like">
           <button
@@ -31,7 +31,7 @@ function Card(props) {
             aria-label="Кнопка лайк"
           ></button>
 
-          <span className="element__like-count">{props.likes}</span>
+          <span className="element__like-count">{card.likes.length}</span>
         </div>
       </div>
     </li>

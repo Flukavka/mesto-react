@@ -1,30 +1,30 @@
 import React from "react";
 
-function PopupWithForm(props) {
+function PopupWithForm({ name, title, buttonText, isOpen, onClose, ...props }) {
   return (
-    <div className={props.isOpen
-      ? `popup popup-${props.name} popup_opened`
-      : `popup popup-${props.name}`}>
+    <div className={isOpen
+      ? `popup popup-${name} popup_opened`
+      : `popup popup-${name}`}>
       <div className="overlay"></div>
 
       <div className="popup__container">
-        <h2 className="popup__title">{props.title}</h2>
+        <h2 className="popup__title">{title}</h2>
 
-        <form className={`popup__form popup-${props.name}__form`} name={props.name} noValidate>
+        <form className={`popup__form popup-${name}__form`} name={name} noValidate>
           {props.children}
           <button
             type="submit"
-            className={`popup__btn-save popup__button popup-${props.name}__btn-save`}
+            className={`popup__btn-save popup__button popup-${name}__btn-save`}
           >
-            {props.buttonText}
+            {buttonText}
           </button>
         </form>
       </div>
 
       <button
-        onClick={props.onClose}
+        onClick={onClose}
         type="button"
-        className={`popup__close popup__close-${props.name}`}
+        className={`popup__close popup__close-${name}`}
         aria-label="Закрыть всплывающее окно"
       ></button>
     </div >
