@@ -3,7 +3,7 @@ import React from "react";
 function ImagePopup(props) {
 
   return (
-    props.card != null ? (
+    props.card && (
       <div className={
         `popup popup-image popup_opened`} >
         <div className="overlay overlay_opacity"></div>
@@ -21,8 +21,6 @@ function ImagePopup(props) {
           <figcaption className="popup__image-title">{props.card.name}</figcaption>
         </figure>
       </div>
-    ) : (
-      null
     )
   )
 }
