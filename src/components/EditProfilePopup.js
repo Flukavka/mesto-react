@@ -10,7 +10,7 @@ function EditProfilePopup({ isOpen, onClose, ...props }) {
   useEffect(() => {
     setNameState(currentUser.name);
     setDescriptionState(currentUser.about);
-  }, [currentUser]);
+  }, [currentUser, isOpen, onClose]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -31,35 +31,33 @@ function EditProfilePopup({ isOpen, onClose, ...props }) {
       onClose={onClose}
       onSubmit={e => handleSubmit(e)}
     >
-      <>
-        <input
-          value={name || ''}
-          onChange={e => setNameState(e.target.value)}
-          className="popup__input popup__input_field_name"
-          name="name"
-          type="text"
-          placeholder="Введите имя"
-          minLength="2"
-          maxLength="40"
-          required
-        />
+      <input
+        value={name || ''}
+        onChange={e => setNameState(e.target.value)}
+        className="popup__input popup__input_field_name"
+        name="name"
+        type="text"
+        placeholder="Введите имя"
+        minLength="2"
+        maxLength="40"
+        required
+      />
 
-        <span className="popup__error"></span>
+      <span className="popup__error"></span>
 
-        <input
-          value={description || ''}
-          onChange={e => setDescriptionState(e.target.value)}
-          className="popup__input popup__input_field_about"
-          name="about"
-          type="text"
-          placeholder="Введите профессию"
-          minLength="2"
-          maxLength="200"
-          required
-        />
+      <input
+        value={description || ''}
+        onChange={e => setDescriptionState(e.target.value)}
+        className="popup__input popup__input_field_about"
+        name="about"
+        type="text"
+        placeholder="Введите профессию"
+        minLength="2"
+        maxLength="200"
+        required
+      />
 
-        <span className="popup__error"></span>
-      </>
+      <span className="popup__error"></span>
     </PopupWithForm>
   )
 }

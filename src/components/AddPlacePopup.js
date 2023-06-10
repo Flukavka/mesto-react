@@ -1,9 +1,14 @@
 import PopupWithForm from "./PopupWithForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace, ...props }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
   const [name, setNameState] = useState('');
   const [link, setLinkState] = useState('');
+
+  useEffect(() => {
+    setNameState('');
+    setLinkState('')
+  }, [onClose])
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -14,6 +19,14 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, ...props }) {
         link
       }
     )
+  }
+
+  function handleChangeNameEvent(e) {
+    setNameState(e.target.value)
+  }
+
+  function handleChangeLinkEvent(e) {
+    setLinkState(e.target.value)
   }
 
   return (
@@ -28,7 +41,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, ...props }) {
       <>
         <input
           value={name || ''}
-          onChange={e => setNameState(e.target.value)}
+          onChange={handleChangeNameEvent}
           className="popup__input popup__input_field_name"
           name="name"
           type="text"
@@ -42,7 +55,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, ...props }) {
 
         <input
           value={link || ''}
-          onChange={e => setLinkState(e.target.value)}
+          onChange={handleChangeLinkEvent}
           className="popup__input popup__input_field_link"
           name="link"
           type="url"

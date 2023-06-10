@@ -17,15 +17,14 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarState] = useState(false);
   const [selectedCard, setCardImageState] = useState(null);
   const [currentUser, setCurrentUserState] = useState({});
-  const [initialCards, setInitialCardsState] = useState([]);
+  const [cards, setCardsState] = useState([]);
 
   useEffect(() => {
-    api.getUserInfo()
-      .then((userData) => setCurrentUserState(userData))
-      .catch(err => console.log(err));
-
-    api.getInitialCards()
-      .then((initialCards) => setInitialCardsState(initialCards))
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userData, cards]) => {
+        setCurrentUserState(userData);
+        setCardsState(cards)
+      })
       .catch(err => console.log(err));
   }, [])
 
@@ -59,7 +58,7 @@ function App() {
     // Отправляем запрос в API и получаем обновлённые данные карточки
     (!isLiked ? api.likeCard(card) : api.unlikeCard(card))
       .then((newCard) => {
-        setInitialCardsState((cards) => cards.map((cards) => (
+        setCardsState((cards) => cards.map((cards) => (
           (cards._id === card._id) ? newCard : cards)));
       })
       .catch(err => console.log(err));
@@ -69,38 +68,43 @@ function App() {
     const isUserCard = card.owner._id === currentUser._id;
     isUserCard && api.deleteCard(card)
       .then(() => {
-        setInitialCardsState(initialCards =>
-          initialCards.filter(currentCard => currentCard._id !== card._id))
+        setCardsState(cards =>
+          cards.filter(currentCard => currentCard._id !== card._id))
       })
       .catch(err => console.log(err));
   }
 
   function handleUpdateUser({ name, about }) {
     api.setUserInfo({ name, about })
-      .then(userData => setCurrentUserState(userData))
+      .then(userData => {
+        setCurrentUserState(userData);
+        closeAllPopups();
+      })
       .catch(err => console.log(err));
-    closeAllPopups();
   }
 
   function handleUpdateAvatar({ avatar }) {
     api.setUserAvatar({ avatar })
-      .then(userData => setCurrentUserState(userData))
+      .then(userData => {
+        setCurrentUserState(userData);
+        closeAllPopups();
+      })
       .catch(err => console.log(err));
-    closeAllPopups();
   }
 
   function handleAddPlaceSubmit({ name, link }) {
     api.addNewCard({ name, link })
-      .then(newCard => (
-        setInitialCardsState([newCard, ...initialCards])))
+      .then(newCard => {
+        setCardsState([newCard, ...cards]);
+        closeAllPopups();
+      })
       .catch(err => console.log(err));
-    closeAllPopups();
   }
 
   return (
     <div className="root">
       <CurrentUserContext.Provider value={currentUser}>
-        <InitialCardsContext.Provider value={initialCards}>
+        <InitialCardsContext.Provider value={cards}>
           <Header />
 
           <Main
