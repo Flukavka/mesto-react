@@ -6,7 +6,7 @@ function EditAvatarPopup({ isOpen, onClose, ...props }) {
 
   useEffect(() => {
     avatar.current.value = '';
-  }, [onClose])
+  }, [isOpen])
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -25,18 +25,16 @@ function EditAvatarPopup({ isOpen, onClose, ...props }) {
       onClose={onClose}
       onSubmit={e => handleSubmit(e)}
     >
-      <>
-        <input
-          ref={avatar}
-          className="popup__input popup__input_field_avatar"
-          name="avatar"
-          type="url"
-          placeholder="Введите ссылку"
-          required
-        />
+      <input
+        ref={avatar}
+        className="popup__input popup__input_field_avatar"
+        name="avatar"
+        type="url"
+        placeholder="Введите ссылку"
+        required
+      />
+      <span className="popup__error"></span>
 
-        <span className="popup__error"></span>
-      </>
     </PopupWithForm>
   )
 }
